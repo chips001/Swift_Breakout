@@ -14,7 +14,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let scoreDefault: UInt = 0
     let ballLifeDefault: UInt = 3
     let scoreMagnificationDefault: Int = 3
-    
     var score: UInt?
     var ballLife: UInt?
     var scoreMagnification: Int?
