@@ -10,8 +10,8 @@ import UIKit
 import SpriteKit
 
 struct BlockStatus {
-    let row: CGFloat = 10.0
-    let col: CGFloat = 10.0
+    let row: Int = 10.0
+    let col: Int = 10.0
     let width: CGFloat = 30.0
     let height: CGFloat = 20.0
     let margin: CGFloat = 1.0

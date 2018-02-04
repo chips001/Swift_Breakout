@@ -21,7 +21,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var isRebone: Bool = false
     var isDead: Bool = false
     var showString: SKLabelNode?
-    var deadZone: SKSpriteNode?
+    var deadzone: SKSpriteNode?
     
     override init(size: CGSize) {
         
@@ -29,6 +29,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.backgroundColor = UIColor.black
         self.settingPhysics()
         self.settingLife()
+        self.settingDeadzone()
+        self.settingBlock()
     }
     
     private func settingPhysics() {
@@ -51,7 +53,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.showString = SKLabelNode()
         if let showString = self.showString {
             showString.text = ("Life:\(String(describing: self.ballLife)) Score:\(String(describing: self.score))")
-            showString.position = CGPoint(x:self.size.width/2, y:self.size.height - showString.frame.height - 20)
+            showString.position = CGPoint(x: self.size.width/2, y: self.size.height - showString.frame.height - 20)
+        }
+    }
+    
+    private func settingDeadzone() {
+        
+        self.deadzone = SKSpriteNode()
+        if let deadzone = self.deadzone {
+            deadzone.position = CGPoint(x: self.size.width/2.0, y: 50.0)
+            deadzone.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.size.width, height: 20))
+            deadzone.physicsBody?.isDynamic = false
+            deadzone.physicsBody?.collisionBitMask = Category().dead
+            deadzone.physicsBody?.contactTestBitMask = Category().ball
+        }
+    }
+    
+    private func settingBlock() {
+        
+        for i in 1...BlockStatus().row{
+            for j in 1...BlockStatus().col{
+                let block = SKSpriteNode(color: UIColor.blue, size:CGSize(width: BlockStatus().width, height: BlockStatus().height))
+                let blockPosition = CGPoint(x: CGFloat(i) * (self.size.width/CGFloat(BlockStatus().row + 1)), y:self.size.height - CGFloat(j) * (BlockStatus().height + BlockStatus().margin) - 50)
+                block.name = "block"
+                block.position = blockPosition
+                block.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: BlockStatus().width, height: BlockStatus().height))
+                block.userData = ["life": Int(arc4random() % 3 + 1)]
+                
+            }
         }
     }
     
