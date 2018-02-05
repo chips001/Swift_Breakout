@@ -10,8 +10,8 @@ import UIKit
 import SpriteKit
 
 struct BlockStatus {
-    let row: Int = 10.0
-    let col: Int = 10.0
+    let row: Int = 10
+    let col: Int = 10
     let width: CGFloat = 30.0
     let height: CGFloat = 20.0
     let margin: CGFloat = 1.0
@@ -22,9 +22,9 @@ struct BlockStatus {
 struct BarStatus {
     let width: CGFloat = 20.0
     let height: CGFloat = 20.0
-    var player: SKShapeNode?
-    var x: CGFloat?
-    var y: CGFloat?
+//    var player: SKSpriteNode?
+//    var x: CGFloat?
+//    var y: CGFloat?
 }
 
 struct BallStatus {

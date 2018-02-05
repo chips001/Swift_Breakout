@@ -22,6 +22,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var isDead: Bool = false
     var showString: SKLabelNode?
     var deadzone: SKSpriteNode?
+    var player: SKSpriteNode?
+    var x: CGFloat?
+    var y: CGFloat?
     
     override init(size: CGSize) {
         
@@ -31,6 +34,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.settingLife()
         self.settingDeadzone()
         self.settingBlock()
+        self.settingPlayer()
+        self.settingBall()
     }
     
     private func settingPhysics() {
@@ -79,9 +84,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 block.position = blockPosition
                 block.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: BlockStatus().width, height: BlockStatus().height))
                 block.userData = ["life": Int(arc4random() % 3 + 1)]
-                
+                block.alpha *= block.userData?.value(forKey: "life") as! CGFloat / 5
+                block.physicsBody?.isDynamic = false
+                block.physicsBody?.collisionBitMask = Category().block
+                block.physicsBody?.contactTestBitMask = Category().block
+                self.addChild(block)
             }
         }
+    }
+    
+    private func settingPlayer() {
+        
+        self.x = self.frame.midX
+        guard let x = self.x else { return }
+        self.y = self.frame.midY + 100.0
+        guard let y = self.y else { return }
+        
+        self.player = SKSpriteNode(color: UIColor.white, size: CGSize(width: BarStatus().width, height: BarStatus().height))
+        self.player?.position = CGPoint(x: x, y: y)
+        self.player?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: BarStatus().width, height: BarStatus().height))
+        self.player?.physicsBody?.isDynamic = false
+        self.player?.physicsBody?.collisionBitMask = Category().player
+    }
+    
+    private func settingBall() {
+//        guard let x = self.x else { return }
+//        guard let y = self.y else { return }
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
