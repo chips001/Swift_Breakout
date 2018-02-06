@@ -14,17 +14,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let scoreDefault: UInt = 0
     let ballLifeDefault: UInt = 3
     let scoreMagnificationDefault: Int = 3
-    var score: UInt?
-    var ballLife: UInt?
+    
     var scoreMagnification: Int?
     var isLoop: Bool = false
     var isRebone: Bool = false
     var isDead: Bool = false
     var showString: SKLabelNode?
     var deadzone: SKSpriteNode?
-    var player: SKSpriteNode?
-    var x: CGFloat?
-    var y: CGFloat?
     
     override init(size: CGSize) {
         
@@ -36,6 +32,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.settingBlock()
         self.settingPlayer()
         self.settingBall()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func settingPhysics() {
@@ -51,13 +51,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func settingLife() {
         
-        self.score = self.scoreDefault
+        LifeAndScoreManager.sharedManager.score = self.scoreDefault
         self.scoreMagnification = self.scoreMagnificationDefault
-        self.ballLife = self.ballLifeDefault
+        LifeAndScoreManager.sharedManager.ballLife = self.ballLifeDefault
         
         self.showString = SKLabelNode()
         if let showString = self.showString {
-            showString.text = ("Life:\(String(describing: self.ballLife)) Score:\(String(describing: self.score))")
+            showString.text = ("Life:\(String(describing: LifeAndScoreManager.sharedManager.ballLife)) Score:\(String(describing: LifeAndScoreManager.sharedManager.score))")
             showString.position = CGPoint(x: self.size.width/2, y: self.size.height - showString.frame.height - 20)
         }
     }
@@ -76,18 +76,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func settingBlock() {
         
-        for i in 1...BlockStatus().row{
-            for j in 1...BlockStatus().col{
-                let block = SKSpriteNode(color: UIColor.blue, size:CGSize(width: BlockStatus().width, height: BlockStatus().height))
-                let blockPosition = CGPoint(x: CGFloat(i) * (self.size.width/CGFloat(BlockStatus().row + 1)), y:self.size.height - CGFloat(j) * (BlockStatus().height + BlockStatus().margin) - 50)
-                block.name = "block"
-                block.position = blockPosition
-                block.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: BlockStatus().width, height: BlockStatus().height))
-                block.userData = ["life": Int(arc4random() % 3 + 1)]
-                block.alpha *= block.userData?.value(forKey: "life") as! CGFloat / 5
-                block.physicsBody?.isDynamic = false
-                block.physicsBody?.collisionBitMask = Category().block
-                block.physicsBody?.contactTestBitMask = Category().block
+        for i in 1...BlockStatusManager.sharedManager.row{
+            for j in 1...BlockStatusManager.sharedManager.col{
+                let block = BlockStatusManager.sharedManager.createBlock(frame: self.frame, row: i, col: j)
                 self.addChild(block)
             }
         }
@@ -95,31 +86,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private func settingPlayer() {
         
-        self.x = self.frame.midX
-        guard let x = self.x else { return }
-        self.y = self.frame.midY + 100.0
-        guard let y = self.y else { return }
-        
-        self.player = SKSpriteNode(color: UIColor.white, size: CGSize(width: BarStatus().width, height: BarStatus().height))
-        self.player?.position = CGPoint(x: x, y: y)
-        self.player?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: BarStatus().width, height: BarStatus().height))
-        self.player?.physicsBody?.isDynamic = false
-        self.player?.physicsBody?.collisionBitMask = Category().player
+        BarStatusManager.sharedManager.createPlayer(frame: self.frame)
     }
     
     private func settingBall() {
-//        guard let x = self.x else { return }
-//        guard let y = self.y else { return }
         
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError()
+        BallStatusManager.sharedManager.createBall()
     }
     
     override func didMove(to view: SKView) {
+        
+        super.didMove(to: view)
+        if let showString = self.showString, let deadzone = self.deadzone, let player = BarStatusManager.sharedManager.player, let ball = BallStatusManager.sharedManager.ball{
+            self.addChild(showString)
+            self.addChild(deadzone)
+            self.addChild(player)
+            self.addChild(ball)
+        }
     }
-
+    
     func touchDown(atPoint pos : CGPoint) {
     }
     
@@ -132,19 +117,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchDown(atPoint: t.location(in: self)) }
     }
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
-    
+
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
-    
+
     override func update(_ currentTime: TimeInterval) {
     }
 }

@@ -9,32 +9,6 @@
 import UIKit
 import SpriteKit
 
-struct BlockStatus {
-    let row: Int = 10
-    let col: Int = 10
-    let width: CGFloat = 30.0
-    let height: CGFloat = 20.0
-    let margin: CGFloat = 1.0
-    var x: CGFloat?
-    var y: CGFloat?
-}
-
-struct BarStatus {
-    let width: CGFloat = 20.0
-    let height: CGFloat = 20.0
-//    var player: SKSpriteNode?
-//    var x: CGFloat?
-//    var y: CGFloat?
-}
-
-struct BallStatus {
-    let width: CGFloat = 8.0
-    let height: CGFloat = 8.0
-    var ball: SKShapeNode?
-    var bx: CGFloat?
-    var by: CGFloat?
-}
-
 struct Category {
     let block: UInt32 = 1 << 0
     let ball: UInt32 = 1 << 1
