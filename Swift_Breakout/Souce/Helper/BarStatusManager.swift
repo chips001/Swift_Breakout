@@ -13,7 +13,7 @@ class BarStatusManager: NSObject {
     
     static let sharedManager = BarStatusManager()
     
-    let width: CGFloat = 20.0
+    let width: CGFloat = 100.0
     let height: CGFloat = 20.0
     var player: SKSpriteNode?
     var x: CGFloat?
@@ -26,7 +26,7 @@ class BarStatusManager: NSObject {
     func createPlayer(frame: CGRect) {
         
         self.x = frame.midX
-        self.y = frame.midY + 100.0
+        self.y = frame.minY + 100.0
         
         if let x = self.x , let y = self.y {
             self.player = SKSpriteNode(color: UIColor.white, size: CGSize(width: self.width, height: self.height))

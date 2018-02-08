@@ -13,8 +13,8 @@ class LifeAndScoreManager: NSObject {
 
     static let sharedManager = LifeAndScoreManager()
     
-    var score: UInt?
-    var ballLife: UInt?
+    var score: UInt = 0
+    var ballLife: UInt = 0
     
     private override init() {
         super.init()
@@ -22,9 +22,6 @@ class LifeAndScoreManager: NSObject {
     
     func getData() -> (life: UInt, score: UInt) {
         
-        if let ballLife = self.ballLife, let score = self.score {
-            return (life: ballLife, score: score)
-        }
-        fatalError()
+        return (life: ballLife, score: score)
     }
 }

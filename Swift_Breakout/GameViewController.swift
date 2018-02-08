@@ -9,7 +9,7 @@
 import UIKit
 import SpriteKit
 
-class GameViewController: UIViewController, SKSceneDelegate {
+class GameViewController: UIViewController, EscapeProtocol {
 
     var skView: SKView?
     
@@ -19,24 +19,25 @@ class GameViewController: UIViewController, SKSceneDelegate {
         self.skView = self.view as? SKView
         if let skView = self.skView {
             skView.ignoresSiblingOrder = true
+            startGame()
         }
     }
     
     func startGame() {
         
         if let skView = self.skView {
-            let sence = GameScene(size: skView.bounds.size)
-            sence.delegate = self
-            skView.presentScene(sence)
+            let scene = GameScene(size: skView.bounds.size)
+            scene.escapeProtocol = self
+            skView.presentScene(scene)
         }
     }
-    
+
     func gameover() {
         
         if let skView = self.skView {
-            let sence = GameScene(size: skView.bounds.size)
-            sence.delegate = self
-            skView.presentScene(sence)
+            let scene = GameScene(size: skView.bounds.size)
+            scene.escapeProtocol = self
+            skView.presentScene(scene)
         }
     }
     

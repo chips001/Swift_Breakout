@@ -11,6 +11,7 @@ import GameplayKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    var escapeProtocol: EscapeProtocol?
     let scoreDefault: UInt = 0
     let ballLifeDefault: UInt = 3
     let scoreMagnificationDefault: Int = 3
@@ -57,7 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.showString = SKLabelNode()
         if let showString = self.showString {
-            showString.text = ("Life:\(String(describing: LifeAndScoreManager.sharedManager.ballLife)) Score:\(String(describing: LifeAndScoreManager.sharedManager.score))")
+            showString.text = ("Life:\(String(describing: LifeAndScoreManager.sharedManager.ballLife))    Score:\(String(describing: LifeAndScoreManager.sharedManager.score))")
             showString.position = CGPoint(x: self.size.width/2, y: self.size.height - showString.frame.height - 20)
         }
     }
@@ -128,8 +129,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        
+        if self.isLoop {
+            self.movingBall()
+        }
     }
 
     override func update(_ currentTime: TimeInterval) {
+    }
+    
+    func movingBall() {
+        
+        self.isLoop = true
+        let rnd = CGFloat(arc4random() % 4)
+        let ballVal = CGVector(dx: ((arc4random() % 2 == 0) ? -200 - rnd: 200 + rnd), dy: 200 + 200)
+        BallStatusManager.sharedManager.ball?.physicsBody?.velocity = ballVal
+    }
+    
+    func restart() {
+        
+        self.escapeProtocol?.escape(scene: self)
     }
 }

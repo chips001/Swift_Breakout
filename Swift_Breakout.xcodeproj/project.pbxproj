@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7862C26B202C663900DB41B3 /* EscapoProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7862C26A202C663900DB41B3 /* EscapoProtocol.swift */; };
 		786848B8201837F800A0B678 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 786848B7201837F800A0B678 /* AppDelegate.swift */; };
 		786848BA201837F800A0B678 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 786848B9201837F800A0B678 /* GameScene.sks */; };
 		786848BC201837F800A0B678 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 786848BB201837F800A0B678 /* Actions.sks */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7862C26A202C663900DB41B3 /* EscapoProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EscapoProtocol.swift; sourceTree = "<group>"; };
 		786848B4201837F800A0B678 /* Swift_Breakout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swift_Breakout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		786848B7201837F800A0B678 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		786848B9201837F800A0B678 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -53,6 +55,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7862C269202C651400DB41B3 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				7862C26A202C663900DB41B3 /* EscapoProtocol.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		786848AB201837F800A0B678 = {
 			isa = PBXGroup;
 			children = (
@@ -102,6 +112,7 @@
 		786848D020183A6700A0B678 /* Souce */ = {
 			isa = PBXGroup;
 			children = (
+				7862C269202C651400DB41B3 /* Common */,
 				786848CF20183A5700A0B678 /* Helper */,
 			);
 			path = Souce;
@@ -185,6 +196,7 @@
 				788A40CC2029A54D002A520E /* BallStatusManager.swift in Sources */,
 				788A40D02029CAA4002A520E /* LifeAndScoreManager.swift in Sources */,
 				786848BE201837F800A0B678 /* GameScene.swift in Sources */,
+				7862C26B202C663900DB41B3 /* EscapoProtocol.swift in Sources */,
 				786848C0201837F800A0B678 /* GameViewController.swift in Sources */,
 				786848B8201837F800A0B678 /* AppDelegate.swift in Sources */,
 				786848D220183ADB00A0B678 /* content.swift in Sources */,

@@ -9,9 +9,9 @@
 import SpriteKit
 
 class GameOver: SKScene {
-
-    var escapeDelegate: SKViewDelegate?
     
+    var escapeProtocol: EscapeProtocol?
+
     override func didMove(to view: SKView) {
         
         super.didMove(to: view)
@@ -26,7 +26,6 @@ class GameOver: SKScene {
         let values = LifeAndScoreManager.sharedManager.getData()
         self.criateLifeAndScore(board: board, gameover: gameover, life: values.life, score: values.score)
         
-//        self.escapeDelegate.escape(self)
     }
     
     func criateLifeAndScore(board: SKNode, gameover: SKLabelNode, life: UInt, score: UInt) {
@@ -86,5 +85,12 @@ class GameOver: SKScene {
         ready.position.x = highScoreLabel.position.x
         ready.position.y = highScoreLabel.position.y - 100
         self.addChild(ready)
+        
+        self.addChild(board)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        self.escapeProtocol?.escape(scene: self)
     }
 }
