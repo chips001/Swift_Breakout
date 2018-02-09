@@ -24,7 +24,7 @@ class GameOver: SKScene {
         board.addChild(gameover)
         
         let values = LifeAndScoreManager.sharedManager.getData()
-        self.criateLifeAndScore(board: board, gameover: gameover, life: values.life, score: values.score)
+        self.criateLifeAndScore(board: board, gameover: gameover, life: UInt(values.life), score: UInt(values.score))
         
     }
     
