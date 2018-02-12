@@ -14,7 +14,8 @@ class LifeAndScoreManager: NSObject {
     static let sharedManager = LifeAndScoreManager()
     
     var score: Int = 0
-    var ballLife: Int = 0
+    var ballLife: Int = 3
+    var scoreMagnification: Int = 3
     
     private override init() {
         super.init()
@@ -22,6 +23,6 @@ class LifeAndScoreManager: NSObject {
     
     func getData() -> (life: Int, score: Int) {
         
-        return (life: ballLife, score: score)
+        return (life: self.ballLife, score: self.score)
     }
 }

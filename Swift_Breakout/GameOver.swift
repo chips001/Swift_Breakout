@@ -20,7 +20,7 @@ class GameOver: SKScene {
         let gameover = SKLabelNode()
         gameover.text = "GameOver"
         gameover.fontSize = 50
-        gameover.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        gameover.position = CGPoint(x: self.frame.midX, y: self.frame.midY + 200)
         board.addChild(gameover)
         
         let values = LifeAndScoreManager.sharedManager.getData()
@@ -77,14 +77,16 @@ class GameOver: SKScene {
         highScoreLabel.position.x = scoreLabel.position.x
         highScoreLabel.position.y = scoreLabel.position.y - 100
         board.addChild(highScoreLabel)
+        
+        self.createReTry(board: board, highScoreLabel: highScoreLabel, life: life, score: score)
     }
     
-    func createReady(board: SKNode, highScoreLabel: SKLabelNode, life: UInt, score: UInt) {
-        let ready = SKLabelNode()
-        ready.text = "Tap to ready"
-        ready.position.x = highScoreLabel.position.x
-        ready.position.y = highScoreLabel.position.y - 100
-        self.addChild(ready)
+    func createReTry(board: SKNode, highScoreLabel: SKLabelNode, life: UInt, score: UInt) {
+        let reTry = SKLabelNode()
+        reTry.text = "Tap to ready"
+        reTry.position.x = highScoreLabel.position.x
+        reTry.position.y = highScoreLabel.position.y - 100
+        self.addChild(reTry)
         
         self.addChild(board)
     }
