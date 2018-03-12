@@ -33,7 +33,7 @@ class BarStatusManager: NSObject {
             self.player?.position = CGPoint(x: x, y: y)
             self.player?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.width, height: self.height))
             self.player?.physicsBody?.isDynamic = false
-            self.player?.physicsBody?.collisionBitMask = Category().player
+            self.player?.physicsBody?.collisionBitMask = CategoryManager.sharedManager.player
         }
     }
 }

@@ -18,13 +18,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var isDead: Bool = false
     var showString = SKLabelNode()
     var deadzone = SKSpriteNode()
+    var first = SKPhysicsBody()
+    var second = SKPhysicsBody()
     
     override init(size: CGSize) {
         
         super.init(size: size)
         self.backgroundColor = UIColor.black
+        self.physicsWorld.contactDelegate = self
         self.settingPhysics()
-        self.settingLife()
+        self.settingLifeAndScore()
         self.settingDeadzone()
         self.settingBlock()
         self.settingPlayer()
@@ -40,10 +43,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsWorld.gravity = CGVector(dx: 0.0, dy: 0.0)
         self.physicsWorld.contactDelegate = self
-        self.physicsBody?.collisionBitMask = Category().wall
+        self.physicsBody?.collisionBitMask = CategoryManager.sharedManager.wall
     }
     
-    private func settingLife() {
+    private func settingLifeAndScore() {
         
         self.showString.text = ("Life:\(String(describing: LifeAndScoreManager.sharedManager.ballLife))    Score:\(String(describing: LifeAndScoreManager.sharedManager.score))")
         self.showString.position = CGPoint(x: self.size.width/2, y: self.size.height - self.showString.frame.height - 20)
@@ -54,8 +57,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.deadzone.position = CGPoint(x: self.size.width/2.0, y: 50.0)
         self.deadzone.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.size.width, height: 20))
         self.deadzone.physicsBody?.isDynamic = false
-        self.deadzone.physicsBody?.collisionBitMask = Category().dead
-        self.deadzone.physicsBody?.contactTestBitMask = Category().ball
+        self.deadzone.physicsBody?.collisionBitMask = CategoryManager.sharedManager.dead
+        self.deadzone.physicsBody?.contactTestBitMask = CategoryManager.sharedManager.ball
     }
     
     private func settingBlock() {
@@ -79,8 +82,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didMove(to view: SKView) {
-        
         super.didMove(to: view)
+        
         if let player = BarStatusManager.sharedManager.player, let ball = BallStatusManager.sharedManager.ball{
             self.addChild(showString)
             self.addChild(deadzone)
@@ -91,12 +94,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+        
         if !self.isLoop {
             self.movingBall()
         }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
         super.touchesMoved(touches, with: event)
         if self.isLoop {
             for touch in touches {
@@ -107,23 +112,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     class func getLifeAndScore() -> (life: Int, score: Int) {
+        
         return (life: LifeAndScoreManager.sharedManager.ballLife, score: LifeAndScoreManager.sharedManager.score)
     }
     
     func movingBall() {
         
         self.isLoop = true
-        let rnd = CGFloat(arc4random() % 4)
+        let rnd = CGFloat(arc4random() % 30)
         let ballVal = CGVector(dx: ((arc4random() % 2 == 0) ? -200 - rnd: 200 + rnd), dy: 200 + rnd)
         BallStatusManager.sharedManager.ball?.physicsBody?.velocity = ballVal
     }
     
     func accelerate() {
+        
         BallStatusManager.sharedManager.ball?.physicsBody?.velocity.dx *= 1.01
         BallStatusManager.sharedManager.ball?.physicsBody?.velocity.dy *= 1.01
     }
     
     func rebone() {
+        
         self.isRebone = false
         LifeAndScoreManager.sharedManager.ballLife = LifeAndScoreManager.sharedManager.ballLife - 1
         self.isLoop = false
@@ -139,46 +147,48 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func restart() {
+        
         self.escapeProtocol?.escape(scene: self)
     }
     
-    func didBiginContact(contact: SKPhysicsContact) {
-        var first: SKPhysicsBody
-        var second: SKPhysicsBody
+    func didBeginContact(contact: SKPhysicsContact) {
         
         if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {
-            first = contact.bodyA
-            second = contact.bodyB
+            self.first = contact.bodyA
+            self.second = contact.bodyB
         } else {
-            first = contact.bodyB
-            second = contact.bodyA
+            self.first = contact.bodyB
+            self.second = contact.bodyA
         }
         
-        if first.categoryBitMask == Category().ball {
-            switch second.collisionBitMask {
-                
-            case Category().block:
+        if first.categoryBitMask == CategoryManager.sharedManager.ball {
+            
+            switch self.second.collisionBitMask {
+            case CategoryManager.sharedManager.block:
                 self.accelerate()
                 
                 LifeAndScoreManager.sharedManager.score = LifeAndScoreManager.sharedManager.score + 10 + (10 * LifeAndScoreManager.sharedManager.scoreMagnification)
                 LifeAndScoreManager.sharedManager.scoreMagnification = LifeAndScoreManager.sharedManager.scoreMagnification + 1
                 
-                var life: Int = second.node?.userData?.value(forKey: "life") as! Int
+                var life: Int = self.second.node?.userData?.value(forKey: "life") as! Int
                 life = life - 1
-                second.node?.userData?.setValue(life, forKey: "life")
-                second.node?.alpha *= 0.5
+                self.second.node?.userData?.setValue(life, forKey: "life")
+                self.second.node?.alpha *= 0.5
                 
-                if (second.node?.userData?.value(forKey: "life") as! Int) < 1 {
-                    second.node?.removeFromParent()
+                if (self.second.node?.userData?.value(forKey: "life") as! Int) < 1 {
+                    self.second.node?.removeFromParent()
                 }
-            case Category().dead:
+                
+            case CategoryManager.sharedManager.dead:
                 if LifeAndScoreManager.sharedManager.ballLife > 1 {
                     self.isRebone = true
                 } else {
                     self.isDead = true
                 }
-            case Category().player:
+                
+            case CategoryManager.sharedManager.player:
                 LifeAndScoreManager.sharedManager.scoreMagnification = 0
+                
             default:
                 break
             }
@@ -186,6 +196,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        
         self.showString.text = "Life:\(LifeAndScoreManager.sharedManager.ballLife)    Score:\(LifeAndScoreManager.sharedManager.score)"
         
         if self.isRebone {

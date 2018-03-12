@@ -14,8 +14,8 @@ class LifeAndScoreManager: NSObject {
     static let sharedManager = LifeAndScoreManager()
     
     var score: Int = 0
+    var scoreMagnification: Int = 0
     var ballLife: Int = 3
-    var scoreMagnification: Int = 3
     
     private override init() {
         super.init()

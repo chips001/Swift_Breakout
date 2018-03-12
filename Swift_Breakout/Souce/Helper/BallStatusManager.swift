@@ -34,8 +34,8 @@ class BallStatusManager: NSObject {
                 self.ball?.position = CGPoint(x: bx, y: by)
                 self.ball?.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: width, height: height))
                 self.ball?.physicsBody?.usesPreciseCollisionDetection = true
-                self.ball?.physicsBody?.collisionBitMask = Category().ball
-                self.ball?.physicsBody?.contactTestBitMask = Category().block | Category().dead | Category().player
+                self.ball?.physicsBody?.collisionBitMask = CategoryManager.sharedManager.ball
+                self.ball?.physicsBody?.contactTestBitMask = CategoryManager.sharedManager.block | CategoryManager.sharedManager.dead | CategoryManager.sharedManager.player
                 self.ball?.physicsBody?.allowsRotation = false
                 self.ball?.physicsBody?.restitution = 1
                 self.ball?.physicsBody?.friction = 0

@@ -35,8 +35,8 @@ class BlockStatusManager: NSObject {
         block.userData = ["life": Int(arc4random() % 3 + 1)]
         block.alpha *= block.userData?.value(forKey: "life") as! CGFloat / 5
         block.physicsBody?.isDynamic = false
-        block.physicsBody?.collisionBitMask = Category().block
-        block.physicsBody?.contactTestBitMask = Category().block
+        block.physicsBody?.collisionBitMask = CategoryManager.sharedManager.block
+        block.physicsBody?.contactTestBitMask = CategoryManager.sharedManager.block
         
         return block
     }
